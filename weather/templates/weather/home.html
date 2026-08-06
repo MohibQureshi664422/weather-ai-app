@@ -1,0 +1,298 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Weather App</title>
+
+    <link rel="stylesheet" href="{% static 'weather/style.css' %}">
+
+</head>
+
+
+<body>
+
+
+<div class="weather-container">
+
+
+<h1>🌤️ Weather App</h1>
+
+
+<!-- City Search -->
+
+<form method="GET">
+
+    <input 
+    type="text" 
+    name="city" 
+    placeholder="Enter city name"
+    required>
+
+    <button type="submit">
+        Search
+    </button>
+
+</form>
+
+
+<br>
+
+
+<!-- Current Location -->
+
+<button onclick="getLocation()" type="button">
+
+📍 Current Location
+
+</button>
+
+
+
+
+{% if weather %}
+
+
+<div class="weather-info">
+
+
+<h2>{{ weather.city }}</h2>
+
+
+<img 
+src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png"
+alt="weather icon">
+
+
+<h3>
+{{ weather.temperature }}°C
+</h3>
+
+
+<p>
+{{ weather.description }}
+</p>
+
+
+
+
+<div class="details">
+
+
+<div>
+🌡️
+<br>
+Feels Like
+<br>
+{{ weather.feels_like }}°C
+</div>
+
+
+
+<div>
+💧
+<br>
+Humidity
+<br>
+{{ weather.humidity }}%
+</div>
+
+
+
+<div>
+🌬️
+<br>
+Wind
+<br>
+{{ weather.wind }} m/s
+</div>
+
+
+
+<div>
+🔽
+<br>
+Pressure
+<br>
+{{ weather.pressure }} hPa
+</div>
+
+
+</div>
+
+
+
+<!-- Forecast -->
+
+<h2>
+5 Day Forecast
+</h2>
+
+
+
+<div class="forecast-container">
+
+
+{% for day in forecast %}
+
+
+<div class="forecast-card">
+
+
+<p>
+{{ day.date }}
+</p>
+
+
+<img 
+src="https://openweathermap.org/img/wn/{{ day.icon }}@2x.png">
+
+
+<h3>
+{{ day.temperature }}°C
+</h3>
+
+
+<p>
+{{ day.description }}
+</p>
+
+
+</div>
+
+
+{% endfor %}
+
+
+
+</div>
+
+
+
+
+
+<!-- AI Assistant -->
+
+<hr>
+
+
+<h2>
+🤖 AI Weather Assistant
+</h2>
+
+
+
+<form method="GET">
+
+
+<input 
+type="hidden"
+name="city"
+value="{{ weather.city }}">
+
+
+
+<input
+
+type="text"
+
+name="question"
+
+placeholder="Ask weather question">
+
+
+<button type="submit">
+
+Ask AI
+
+</button>
+
+
+</form>
+
+
+
+{% if ai_answer %}
+
+
+<div class="ai-box">
+
+
+<h3>
+AI Answer:
+</h3>
+
+
+<p>
+{{ ai_answer }}
+</p>
+
+
+</div>
+
+
+{% endif %}
+
+
+
+
+
+</div>
+
+
+
+{% elif error %}
+
+
+<h3>
+{{ error }}
+</h3>
+
+
+{% endif %}
+
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+function getLocation(){
+
+
+navigator.geolocation.getCurrentPosition(
+
+function(position){
+
+
+let lat = position.coords.latitude;
+
+let lon = position.coords.longitude;
+
+
+window.location.href =
+`/?lat=${lat}&lon=${lon}`;
+
+
+}
+
+);
+
+
+}
+
+
+</script>
+
+
+
+</body>
+
+</html>
